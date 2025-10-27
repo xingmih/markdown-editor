@@ -1,0 +1,289 @@
+/* 基础样式 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* 暗色模式滚动条 */
+.dark ::-webkit-scrollbar-track {
+  background: #333;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #666;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* 编辑器和预览区样式 */
+.editor-container, .preview-container {
+  height: calc(100vh - 120px);
+}
+
+#editor {
+  font-family: 'Fira Code', monospace;
+  line-height: 1.6;
+}
+
+#preview {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.8;
+}
+
+/* 预览区内容样式 */
+#preview h1, #preview h2, #preview h3, #preview h4, #preview h5, #preview h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+#preview h1 {
+  font-size: 2rem;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3rem;
+}
+
+#preview h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3rem;
+}
+
+#preview h3 {
+  font-size: 1.25rem;
+}
+
+#preview p {
+  margin-bottom: 1rem;
+}
+
+#preview ul, #preview ol {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+#preview ul {
+  list-style-type: disc;
+}
+
+#preview ol {
+  list-style-type: decimal;
+}
+
+#preview li {
+  margin-bottom: 0.5rem;
+}
+
+#preview a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+#preview a:hover {
+  text-decoration: underline;
+}
+
+#preview blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  margin-bottom: 1rem;
+}
+
+#preview pre {
+  background-color: #f6f8fa;
+  border-radius: 3px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
+
+#preview code {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  background-color: rgba(27, 31, 35, 0.05);
+  border-radius: 3px;
+}
+
+#preview pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+#preview table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+#preview th, #preview td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #eaecef;
+}
+
+#preview th {
+  font-weight: 600;
+  background-color: #f6f8fa;
+}
+
+#preview img {
+  max-width: 100%;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+/* 暗色模式预览区内容样式 */
+.dark #preview h1, .dark #preview h2 {
+  border-bottom-color: #373c42;
+}
+
+.dark #preview blockquote {
+  color: #adbac7;
+  border-left-color: #373c42;
+}
+
+.dark #preview pre {
+  background-color: #2d3748;
+}
+
+.dark #preview code {
+  background-color: rgba(75, 85, 99, 0.3);
+}
+
+.dark #preview th {
+  background-color: #2d3748;
+}
+
+/* 工具栏按钮样式 */
+.toolbar-btn {
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar-btn i {
+  margin-right: 4px;
+}
+
+.toolbar-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.dark .toolbar-btn:hover {
+  background-color: #4a5568;
+}
+
+.toolbar-btn.active {
+  background-color: #cbd5e0;
+  font-weight: 500;
+}
+
+.dark .toolbar-btn.active {
+  background-color: #4a5568;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+  }
+
+  .editor-container, .preview-container {
+    width: 100%;
+    height: 50vh;
+  }
+
+  #resizer {
+    width: 100%;
+    height: 5px;
+    cursor-row-resize;
+  }
+}
+
+/* 通知提示样式 */
+#notification {
+  z-index: 1000;
+}
+
+#notification.show {
+  transform: translateX(0);
+}
+
+/* 语法提示卡片样式 */
+#syntaxCard {
+  z-index: 1000;
+  border: 1px solid #e2e8f0;
+}
+
+.dark #syntaxCard {
+  border-color: #373c42;
+}
+
+/* 全屏模式 */
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+.fullscreen-editor #editor {
+  height: calc(100vh - 80px);
+}
+
+.fullscreen-preview #preview {
+  height: calc(100vh - 80px);
+}
+
+/* 动画效果 */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown 在线编辑器</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Highlight.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js/styles/github.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js/highlight.min.js"></script>
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+  <!-- 顶部导航栏 -->
+  <header class="bg-gray-800 text-white shadow-md">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <h1 class="text-xl font-bold flex items-center">
+          <i class="fa fa-markdown mr-2"></i>
+          Markdown 编辑器
+        </h1>
+        <div class="hidden md:flex space-x-2">
+          <button id="newBtn" class="px-3 py-1 rounded hover:bg-gray-700 flex items-center">
+            <i class="fa fa-file-o mr-1"></i> 新建
+          </button>
+          <button id="saveBtn" class="px-3 py-1 rounded hover:bg-gray-700 flex items-center">
+            <i class="fa fa-save mr-1"></i> 保存
+          </button>
+          <button id="clearBtn" class="px-3 py-1 rounded hover:bg-gray-700 flex items-center">
+            <i class="fa fa-trash-o mr-1"></i> 清空
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button id="themeToggleBtn" class="px-3 py-1 rounded hover:bg-gray-700 flex items-center">
+          <i class="fa fa-moon-o mr-1"></i> 暗色模式
+        </button>
+        <button id="fullscreenBtn" class="px-3 py-1 rounded hover:bg-gray-700 flex items-center">
+          <i class="fa fa-expand mr-1"></i> 全屏
+        </button>
+        <div class="md:hidden">
+          <button id="mobileMenuBtn" class="px-3 py-1 rounded hover:bg-gray-700">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- 移动端菜单 -->
+    <div id="mobileMenu" class="hidden md:hidden bg-gray-700">
+      <div class="container mx-auto px-4 py-2 flex flex-col space-y-2">
+        <button id="mobileNewBtn" class="px-3 py-2 rounded hover:bg-gray-600 flex items-center">
+          <i class="fa fa-file-o mr-2"></i> 新建
+        </button>
+        <button id="mobileSaveBtn" class="px-3 py-2 rounded hover:bg-gray-600 flex items-center">
+          <i class="fa fa-save mr-2"></i> 保存
+        </button>
+        <button id="mobileClearBtn" class="px-3 py-2 rounded hover:bg-gray-600 flex items-center">
+          <i class="fa fa-trash-o mr-2"></i> 清空
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主编辑区 -->
+  <main class="flex-1 flex overflow-hidden">
+    <!-- 左侧编辑区 -->
+    <div class="editor-container flex-1 flex flex-col border-r border-gray-300 bg-white dark:bg-gray-900">
+      <div class="editor-header px-4 py-2 bg-gray-200 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700 flex justify-between items-center">
+        <h2 class="font-medium">编辑区</h2>
+        <div class="flex space-x-2">
+          <button id="copyBtn" class="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+            <i class="fa fa-copy"></i>
+          </button>
+          <button id="pasteBtn" class="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+            <i class="fa fa-paste"></i>
+          </button>
+        </div>
+      </div>
+      <div class="editor-toolbar px-4 py-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700 flex flex-wrap gap-1">
+        <button data-command="heading" data-value="1" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-header"></i> 1
+        </button>
+        <button data-command="heading" data-value="2" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-header"></i> 2
+        </button>
+        <button data-command="heading" data-value="3" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-header"></i> 3
+        </button>
+        <span class="border-r border-gray-400 mx-1 h-6"></span>
+        <button data-command="bold" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-bold"></i>
+        </button>
+        <button data-command="italic" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-italic"></i>
+        </button>
+        <button data-command="strikethrough" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-strikethrough"></i>
+        </button>
+        <span class="border-r border-gray-400 mx-1 h-6"></span>
+        <button data-command="ul" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-list-ul"></i>
+        </button>
+        <button data-command="ol" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-list-ol"></i>
+        </button>
+        <span class="border-r border-gray-400 mx-1 h-6"></span>
+        <button data-command="link" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-link"></i>
+        </button>
+        <button data-command="image" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-image"></i>
+        </button>
+        <span class="border-r border-gray-400 mx-1 h-6"></span>
+        <button data-command="code" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-code"></i>
+        </button>
+        <button data-command="codeblock" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-code-fork"></i>
+        </button>
+        <span class="border-r border-gray-400 mx-1 h-6"></span>
+        <button data-command="table" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-table"></i>
+        </button>
+        <button data-command="hr" class="toolbar-btn px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+          <i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <textarea id="editor" class="flex-1 w-full p-4 font-mono text-sm resize-none focus:outline-none bg-white dark:bg-gray-900 dark:text-white" placeholder="在此输入Markdown内容..."></textarea>
+    </div>
+
+    <!-- 分割线 -->
+    <div id="resizer" class="w-1 bg-gray-300 dark:bg-gray-700 hover:bg-blue-500 cursor-col-resize"></div>
+
+    <!-- 右侧预览区 -->
+    <div class="preview-container flex-1 flex flex-col bg-white dark:bg-gray-900">
+      <div class="preview-header px-4 py-2 bg-gray-200 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700 flex justify-between items-center">
+        <h2 class="font-medium">预览区</h2>
+        <div class="flex space-x-2">
+          <button id="copyPreviewBtn" class="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+            <i class="fa fa-copy"></i>
+          </button>
+          <button id="printBtn" class="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700">
+            <i class="fa fa-print"></i>
+          </button>
+        </div>
+      </div>
+      <div id="preview" class="flex-1 overflow-y-auto p-6 prose dark:prose-invert max-w-none"></div>
+    </div>
+  </main>
+
+  <!-- 底部状态栏 -->
+  <footer class="bg-gray-200 dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700 py-2 px-4 text-sm text-gray-600 dark:text-gray-300">
+    <div class="container mx-auto flex flex-wrap justify-between items-center">
+      <div id="wordCount" class="mr-4">字数: 0</div>
+      <div id="syncStatus" class="flex items-center mr-4">
+        <i class="fa fa-check-circle text-green-500 mr-1"></i>
+        <span>已同步</span>
+      </div>
+      <div id="syntaxHint" class="text-xs italic">
+        <i class="fa fa-info-circle mr-1"></i>
+        <span>提示: 输入 # 号创建标题，** 包裹文本创建粗体</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 语法提示卡片 -->
+  <div id="syntaxCard" class="fixed bottom-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 max-w-xs hidden">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="font-medium text-sm">Markdown 语法提示</h3>
+      <button id="closeSyntaxCard" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="text-xs space-y-1">
+      <div><strong># 标题</strong> - # 一级标题, ## 二级标题</div>
+      <div><strong>**粗体**</strong> - 文本变粗</div>
+      <div><strong>*斜体*</strong> - 文本变斜</div>
+      <div><strong>![图片](url)</strong> - 插入图片</div>
+      <div><strong>[链接](url)</strong> - 插入链接</div>
+      <div><strong>- 列表项</strong> - 创建无序列表</div>
+      <div><strong>1. 列表项</strong> - 创建有序列表</div>
+      <div><strong>`代码`</strong> - 行内代码</div>
+      <div><strong>```代码块```</strong> - 多行代码块</div>
+    </div>
+  </div>
+
+  <!-- 通知提示 -->
+  <div id="notification" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg transform translate-x-full transition-transform duration-300 flex items-center">
+    <i class="fa fa-check-circle mr-2"></i>
+    <span id="notificationText">操作成功</span>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
